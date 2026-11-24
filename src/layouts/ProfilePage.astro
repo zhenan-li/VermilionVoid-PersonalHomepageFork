@@ -1,0 +1,18 @@
+---
+import BaseLayout from "./BaseLayout.astro"
+import SiteHeader from "@/components/site-header.astro"
+import { Footer } from "@/components/footer"
+interface Props { title: string; english: string; description: string }
+const { title, english, description } = Astro.props
+---
+<BaseLayout title={`${title} | 李哲楠`} {description} fontProfile="interface">
+  <SiteHeader />
+  <main class="mx-auto min-h-[75vh] max-w-3xl px-6 pb-24 pt-36 sm:pt-44">
+    <header class="mb-12 border-b border-border pb-8">
+      <p lang="en" class="mb-3 font-mono text-xs tracking-widest text-primary">{english}</p>
+      <h1 class="font-serif text-4xl font-bold sm:text-5xl">{title}</h1>
+    </header>
+    <slot />
+  </main>
+  <Footer />
+</BaseLayout>

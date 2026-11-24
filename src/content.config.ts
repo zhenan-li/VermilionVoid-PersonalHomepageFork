@@ -26,13 +26,4 @@ const posts = defineCollection({
   }),
 })
 
-const thoughts = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/thoughts" }),
-  schema: z.object({
-    title: z.string().optional(),
-    published: z.date(),
-    tags: z.array(z.string()).optional().default([]),
-  }),
-})
-
-export const collections = { posts, thoughts }
+export const collections = { posts }

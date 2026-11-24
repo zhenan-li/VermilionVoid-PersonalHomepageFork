@@ -1,3 +1,4 @@
+import { navItems } from "@/data/navigation"
 import type { ComponentType, SVGProps } from "react"
 import { Github, Music, Rss } from "lucide-react"
 import { profile, type ExternalProfileLink, type ExternalProfileLinkType } from "@/data/profile"
@@ -26,10 +27,10 @@ export function Footer() {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <span className="text-foreground font-medium">时歌的博客</span>
+              <span className="text-foreground font-medium">李哲楠的手记</span>
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              理解以真实为本，但真实本身并不会自动呈现
+              {profile.bio}
             </p>
           </div>
 
@@ -38,14 +39,7 @@ export function Footer() {
             <div>
               <h4 className="text-sm font-medium text-foreground mb-4 uppercase tracking-wide">导航</h4>
               <nav className="flex flex-col gap-3">
-              {[
-                { name: "首页", href: "/" },
-                { name: "时间线", href: "/timeline/" },
-                { name: "书架", href: "/bookshelf/" },
-                { name: "友链", href: "/friends/" },
-                { name: "关于", href: "/about/" },
-                { name: "开往", href: "https://www.travellings.cn/go.html", external: true },
-              ].map((item) => (
+              {navItems.map((item) => (
                 <a
                   key={item.name}
                   href={item.href}
@@ -97,15 +91,7 @@ export function Footer() {
 
         {/* Bottom */}
         <div className="mt-16 pt-8 border-t border-border/50 grid gap-4 md:grid-cols-3">
-          <p className="text-muted-foreground text-sm">© 2025 时歌. All rights reserved.</p>
-          <a
-            href="https://beian.miit.gov.cn/"
-            target="_blank"
-            rel="noreferrer"
-            className="text-muted-foreground text-xs hover:text-foreground transition-colors duration-200 md:text-center"
-          >
-            辽ICP备2023010881号-1
-          </a>
+          <p className="text-muted-foreground text-sm">© {new Date().getFullYear()} 李哲楠</p>
           <a
             href="https://github.com/Lapis0x0/VermilionVoid"
             target="_blank"

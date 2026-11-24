@@ -19,8 +19,8 @@ export async function GET(context: APIContext) {
   const publicPosts = posts.filter((post) => !post.data.encrypted)
 
   return rss({
-    title: "时歌的博客 | Boundary of Thought",
-    description: "探索金融、社会与人工智能的交汇点",
+    title: "李哲楠的手记 | Zhenan Li",
+    description: "李哲楠的文章、项目和个人经历。",
     site: context.site ?? "https://example.com",
     items: publicPosts.map((post, index) => {
       const content = typeof post.body === "string" ? post.body : String(post.body || "")

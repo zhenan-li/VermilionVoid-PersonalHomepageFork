@@ -3,16 +3,15 @@
 import { useEffect, useRef, useState, useCallback } from "react"
 
 const phrases = [
-  { prefix: "探求 AI 的", highlight: "边界" },
-  { prefix: "追问金融的", highlight: "理性" },
-  { prefix: "分析社会的", highlight: "结构" },
-  { prefix: "记录跨学科", highlight: "洞见" },
+  { prefix: "关于", highlight: "物理" },
+  { prefix: "关于", highlight: "计算" },
+  { prefix: "关于", highlight: "思考" },
 ]
 
 export function Hero() {
-  const [mounted, setMounted] = useState(false)
+  const [mounted, setMounted] = useState(true)
   const [phraseIndex, setPhraseIndex] = useState(0)
-  const [displayText, setDisplayText] = useState("")
+  const [displayText, setDisplayText] = useState(phrases[0].prefix + phrases[0].highlight)
   const [isDeleting, setIsDeleting] = useState(false)
   // Pause the typewriter loop when the hero is offscreen or the tab is hidden;
   // otherwise the setTimeout chain keeps re-rendering React state while the
@@ -141,7 +140,7 @@ export function Hero() {
           }`}
         >
           <p className="text-[0.65rem] sm:text-xs tracking-[0.4em] text-muted-foreground/60 uppercase mb-8">
-            Boundary of Thought
+            Zhenan Li · Personal Notes
           </p>
 
           <h1 className="font-sans text-[min(10.5vw,3rem)] sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-foreground leading-[1.1] mb-8 min-h-[1.2em] whitespace-nowrap">
@@ -151,14 +150,9 @@ export function Hero() {
             />
           </h1>
 
-          <blockquote className="max-w-xl mx-auto mb-10">
-            <p className="text-content-secondary text-base sm:text-lg leading-relaxed italic">
-              「我不知道我在想什么，直到我读到我写的东西。」
-            </p>
-            <footer className="mt-2 text-sm text-muted-foreground/70">
-              —— Flannery O'Connor
-            </footer>
-          </blockquote>
+          <p className="max-w-xl mx-auto mb-10 font-serif text-content-secondary text-base sm:text-lg leading-relaxed">
+            李哲楠的文章与项目手记
+          </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
@@ -177,10 +171,10 @@ export function Hero() {
               </svg>
             </a>
             <a
-              href="/about/"
+              href="/projects/"
               className="px-8 py-3 border border-border rounded-full font-medium text-sm text-foreground hover:border-foreground/40 transition-all duration-300"
             >
-              关于我
+              查看项目
             </a>
           </div>
         </div>

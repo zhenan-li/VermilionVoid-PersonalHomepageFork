@@ -7,7 +7,7 @@ import SiteHeader from "@/components/site-header.astro"
 import { PAGE_SIZE } from "@/lib/constants"
 import { buildSidebarMeta, getSortedPosts, toPostMeta } from "@/lib/posts"
 
-const description = "探索金融、社会与人工智能的交汇点"
+const description = "李哲楠的文章、项目和个人经历。"
 
 export const getStaticPaths = (async ({ paginate }) => {
   const posts = await getSortedPosts()
@@ -23,8 +23,8 @@ const allArticles = allPosts.map((post) => toPostMeta(post))
 const sidebarMeta = buildSidebarMeta(allArticles)
 const title =
   currentPage > 1
-    ? `时歌的博客 | Boundary of Thought · 第 ${currentPage} 页`
-    : "时歌的博客 | Boundary of Thought"
+    ? `李哲楠的手记 | Zhenan Li · 第 ${currentPage} 页`
+    : "李哲楠的手记 | Zhenan Li"
 ---
 
 <BaseLayout {title} {description} fontProfile="interface">
