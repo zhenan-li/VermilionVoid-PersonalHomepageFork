@@ -25,8 +25,8 @@ export const profile: {
   avatar: string
   links: ProfileLink[]
 } = {
-  name: { zh: "李哲楠", en: "Zhenan Li" },
-  bio: { zh: "文章、实验与项目手记。", en: "Writing, experiments and project notes." },
-  avatar: "/mark.png",
-  links: [{ type: "github", name: "GitHub", url: "https://github.com/zhenan-li" }],
+  name: "",
+  bio: "",
+  avatar: "",
+  links: [],
 }

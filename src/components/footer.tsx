@@ -1,4 +1,4 @@
-import { localText, siteName, type Locale } from "@/data/languages"
+import { localText, siteName, siteDescription, type Locale } from "@/data/languages"
 import { msg } from "@/lib/ui"
 import { navigation } from "@/data/navigation"
 import type { ComponentType, SVGProps } from "react"
@@ -14,6 +14,7 @@ const iconMap: Record<ExternalProfileLinkType, ComponentType<SVGProps<SVGSVGElem
 
 export function Footer({ lang }: { lang: Locale }) {
   const navItems = navigation(lang)
+  const contacts = profile.links.filter((link): link is ExternalProfileLink => link.type !== "wechat")
   return (
     <footer className="border-t border-border/50 bg-background">
       <div className="max-w-6xl mx-auto px-6 py-16">
@@ -23,8 +24,8 @@ export function Footer({ lang }: { lang: Locale }) {
             <div className="flex items-center gap-3 mb-4">
               <div className="w-8 h-8 rounded-full overflow-hidden border border-primary/20 bg-secondary">
                 <img
-                  src={profile.avatar}
-                  alt={localText(profile.name, lang)}
+                  src={profile.avatar || "/mark.png"}
+                  alt=""
                   loading="lazy"
                   decoding="async"
                   className="w-full h-full object-cover"
@@ -33,7 +34,7 @@ export function Footer({ lang }: { lang: Locale }) {
               <span className="text-foreground font-medium">{siteName[lang]}</span>
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              {localText(profile.bio, lang)}
+              {localText(profile.bio, lang) || siteDescription[lang]}
             </p>
           </div>
 
@@ -60,25 +61,29 @@ export function Footer({ lang }: { lang: Locale }) {
           {/* Connect */}
           <div className="md:flex md:justify-end">
             <div>
-              <h4 className="text-sm font-medium text-foreground mb-4 uppercase tracking-wide">{msg(lang, "联系")}</h4>
-              <div className="flex items-center gap-4">
-                {profile.links.filter((link): link is ExternalProfileLink => link.type !== "wechat").map((link) => {
-                  const Icon = iconMap[link.type]
-                  return (
-                    <a
-                      key={link.name}
-                      href={link.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/50 transition-all duration-200"
-                      aria-label={link.name}
-                    >
-                      <Icon className="w-4 h-4" />
-                    </a>
-                  )
-                })}
-              </div>
-              <p className="text-muted-foreground text-sm mt-6">{msg(lang, "通过 RSS 订阅，获取最新文章更新。")}</p>
+              {contacts.length > 0 && (
+                <div className="mb-6">
+                  <h4 className="text-sm font-medium text-foreground mb-4 uppercase tracking-wide">{msg(lang, "联系")}</h4>
+                  <div className="flex items-center gap-4">
+                    {contacts.map((link) => {
+                      const Icon = iconMap[link.type]
+                      return (
+                        <a
+                          key={link.name}
+                          href={link.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/50 transition-all duration-200"
+                          aria-label={link.name}
+                        >
+                          <Icon className="w-4 h-4" />
+                        </a>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+              <p className="text-muted-foreground text-sm">{msg(lang, "通过 RSS 订阅，获取最新文章更新。")}</p>
               <a
                 href={"/" + lang + "/rss.xml"}
                 target="_blank"
@@ -94,7 +99,7 @@ export function Footer({ lang }: { lang: Locale }) {
 
         {/* Bottom */}
         <div className="mt-16 pt-8 border-t border-border/50 grid gap-4 md:grid-cols-3">
-          <p className="text-muted-foreground text-sm">© {new Date().getFullYear()} {localText(profile.name, lang)}</p>
+          <p className="text-muted-foreground text-sm">© {new Date().getFullYear()} {localText(profile.name, lang) || siteName[lang]}</p>
           <a
             href="https://github.com/Lapis0x0/VermilionVoid"
             target="_blank"

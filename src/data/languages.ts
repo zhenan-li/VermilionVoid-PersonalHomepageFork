@@ -15,5 +15,5 @@ export function localizedLink(href: string, locale: Locale) {
   if (!/^\/(?:$|[?#]|(?:posts|timeline|journey|projects|cv|\d+)(?:[/?#]|$)|rss\.xml$)/.test(href)) return href
   return "/" + locale + href
 }
-export const siteName = { en: "Zhenan’s Notes", zh: "李哲楠的手记" }
-export const siteDescription = { en: "Writing, projects and milestones by Zhenan Li.", zh: "李哲楠的文章、项目和个人经历。" }
+export const siteName = { en: "Personal Homepage", zh: "个人主页" }
+export const siteDescription = { en: "Writing, projects and a personal timeline.", zh: "文章、项目与个人经历。" }

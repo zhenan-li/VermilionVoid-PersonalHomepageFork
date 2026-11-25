@@ -1,6 +1,6 @@
-# 李哲楠的手记
+# VermilionVoid 双语个人网站模板
 
-基于 [VermilionVoid（朱墨留白）](https://github.com/Lapis0x0/VermilionVoid) 的双语个人网站。保留主题署名。上游文章版权归原作者，许可说明见[上游 README](https://github.com/Lapis0x0/VermilionVoid#许可)。
+基于 [VermilionVoid（朱墨留白）](https://github.com/Lapis0x0/VermilionVoid) 的 Astro 模板，包含博客、个人时间线、项目和简历页。默认仅有一篇 Hello World 测试文章。上游文章版权归原作者，许可说明见[上游 README](https://github.com/Lapis0x0/VermilionVoid#许可)。
 
 使用 Node.js 24 和 pnpm。运行 `pnpm install --frozen-lockfile` 安装依赖，`pnpm dev` 启动开发服务器，`pnpm build` 生成静态页面和 Pagefind 搜索索引，`pnpm preview` 查看发布版。
 
@@ -42,6 +42,6 @@ translationKey: hello-world
 
 ## 其他配置与部署
 
-- 个人姓名、简介、头像和外链在 `src/data/profile.ts`。站名和站点描述在 `src/data/languages.ts`，导航在 `src/data/navigation.ts`。
+- 要显示作者卡片，在 `src/data/profile.ts` 中填写姓名、简介、头像或社交链接。留空时页面会隐藏作者卡片。站名和站点描述在 `src/data/languages.ts`，导航在 `src/data/navigation.ts`。
 - 项目在 `src/data/projects.ts`，简历页在 `src/pages/[lang]/cv.astro`。
 - Vercel 使用仓库的 `vercel.json` 构建。生产域名默认读取 `VERCEL_PROJECT_PRODUCTION_URL`。绑定自定义域名后，设置完整的 `SITE_URL`（含 `https://`）并重新部署，即可更新规范链接、RSS 和站点地图。

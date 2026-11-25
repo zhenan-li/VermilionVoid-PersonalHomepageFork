@@ -1,23 +1,20 @@
 "use client"
 
-import { localText, siteName, type Locale } from "@/data/languages"
+import { localText, siteDescription, siteName, type Locale } from "@/data/languages"
 import { profile } from "@/data/profile"
 import { msg } from "@/lib/ui"
 import { useEffect, useRef, useState, useCallback } from "react"
 
-const chinese = [
-  { prefix: "关于", highlight: "物理" },
-  { prefix: "关于", highlight: "计算" },
-  { prefix: "关于", highlight: "思考" },
-]
-
-const english = ["physics", "computing", "ideas"].map(highlight => ({ prefix: "On ", highlight }))
+const headings = {
+  en: ["Writing", "Projects", "Timeline"],
+  zh: ["文章", "项目", "经历"],
+}
 
 export function Hero({ lang }: { lang: Locale }) {
-  const phrases = lang === "en" ? english : chinese
+  const phrases = headings[lang]
   const [mounted, setMounted] = useState(true)
   const [phraseIndex, setPhraseIndex] = useState(0)
-  const [displayText, setDisplayText] = useState(phrases[0].prefix + phrases[0].highlight)
+  const [displayText, setDisplayText] = useState(phrases[0])
   const [isDeleting, setIsDeleting] = useState(false)
   // Pause the typewriter loop when the hero is offscreen or the tab is hidden;
   // otherwise the setTimeout chain keeps re-rendering React state while the
@@ -71,8 +68,7 @@ export function Hero({ lang }: { lang: Locale }) {
   const innerTimerRef = useRef<number | null>(null)
 
   const typeWriter = useCallback(() => {
-    const currentPhrase = phrases[phraseIndex]
-    const fullText = currentPhrase.prefix + currentPhrase.highlight
+    const fullText = phrases[phraseIndex]
 
     if (innerTimerRef.current !== null) {
       window.clearTimeout(innerTimerRef.current)
@@ -111,22 +107,6 @@ export function Hero({ lang }: { lang: Locale }) {
     }
   }, [mounted, isActive, typeWriter])
 
-  const renderText = () => {
-    const currentPhrase = phrases[phraseIndex]
-    const prefixLength = currentPhrase.prefix.length
-
-    if (displayText.length <= prefixLength) {
-      return <span>{displayText}</span>
-    } else {
-      return (
-        <>
-          <span>{currentPhrase.prefix}</span>
-          <span className="text-primary">{displayText.slice(prefixLength)}</span>
-        </>
-      )
-    }
-  }
-
   const handleBrowseClick = useCallback((event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault()
     const target = document.getElementById("home-main")
@@ -150,14 +130,14 @@ export function Hero({ lang }: { lang: Locale }) {
           </p>
 
           <h1 className="font-sans text-[min(10.5vw,3rem)] sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-foreground leading-[1.1] mb-8 min-h-[1.2em] whitespace-nowrap">
-            {renderText()}
+            <span className="text-primary">{displayText}</span>
             <span
               className="hero-cursor inline-block w-[0.08em] sm:w-[5px] md:w-[6px] lg:w-[7px] h-[0.9em] sm:h-[60px] md:h-[72px] lg:h-[96px] bg-foreground align-middle rounded-sm ml-2 -translate-y-1"
             />
           </h1>
 
           <p className="max-w-xl mx-auto mb-10 font-serif text-content-secondary text-base sm:text-lg leading-relaxed">
-            {localText(profile.bio, lang)}
+            {localText(profile.bio, lang) || siteDescription[lang]}
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

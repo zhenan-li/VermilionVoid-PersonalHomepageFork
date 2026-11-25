@@ -37,41 +37,41 @@ export function Sidebar({
   const [internalExpanded, setInternalExpanded] = useState(false)
   const isExpanded = categoriesExpanded ?? internalExpanded
   const setExpanded = onCategoriesExpandedChange ?? setInternalExpanded
+  const name = localText(profile.name, lang)
+  const bio = localText(profile.bio, lang)
+  const hasProfile = Boolean(name || bio || profile.avatar || profile.links.length)
   const canCollapse = categories.length > categoryPreviewCount
   const visibleCategories = isExpanded ? categories : categories.slice(0, categoryPreviewCount)
 
   return (
     <aside className="w-full lg:w-72 shrink-0 space-y-8">
-      {/* Author Card */}
-      <div className="bg-card border border-border/50 rounded-xl p-6 text-center">
-        <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden border-2 border-primary/20">
-          <img
-            src={profile.avatar}
-            alt={localText(profile.name, lang)}
-            loading="lazy"
-            decoding="async"
-            className="w-full h-full object-cover"
-          />
+      {hasProfile && (
+        <div className="bg-card border border-border/50 rounded-xl p-6 text-center space-y-4">
+          {profile.avatar && (
+            <img
+              src={profile.avatar}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              className="w-24 h-24 mx-auto rounded-full border-2 border-primary/20 object-cover"
+            />
+          )}
+          {name && <h3 className="font-serif text-xl font-bold text-foreground">{name}</h3>}
+          {bio && <p className="text-sm text-muted-foreground leading-relaxed">{bio}</p>}
+          {profile.links.length > 0 && (
+            <div className="flex items-center justify-center gap-3">
+              {profile.links.map(link => (
+                <ProfileContactLink
+                  key={link.name}
+                  link={link}
+                  className="p-2 rounded-full bg-secondary hover:bg-primary hover:text-primary-foreground transition-colors"
+                  iconClassName="w-4 h-4"
+                />
+              ))}
+            </div>
+          )}
         </div>
-        <h3 className="font-serif text-xl font-bold text-foreground mb-1">{localText(profile.name, lang)}</h3>
-        <div className="w-8 h-0.5 bg-primary mx-auto mb-3" />
-        <p className="text-sm text-muted-foreground leading-relaxed mb-4">{localText(profile.bio, lang)}</p>
-
-        {/* Social Links */}
-        <div className="flex items-center justify-center gap-3 mb-4">
-          {profile.links.map((link) => {
-            return (
-              <ProfileContactLink
-                key={link.name}
-                link={link}
-                className="p-2 rounded-full bg-secondary hover:bg-primary hover:text-primary-foreground transition-colors"
-                iconClassName="w-4 h-4"
-              />
-            )
-          })}
-        </div>
-
-      </div>
+      )}
 
       {/* Categories */}
       <div className="bg-card border border-border/50 rounded-xl p-5">

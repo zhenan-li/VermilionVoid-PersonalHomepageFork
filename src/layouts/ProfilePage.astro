@@ -1,6 +1,5 @@
 ---
-import { profile } from "@/data/profile"
-import { localText, routeLocale } from "@/data/languages"
+import { siteName, routeLocale } from "@/data/languages"
 const lang = routeLocale(Astro.params.lang)
 import BaseLayout from "./BaseLayout.astro"
 import SiteHeader from "@/components/site-header.astro"
@@ -8,7 +7,7 @@ import { Footer } from "@/components/footer"
 interface Props { title: string; english: string; description: string }
 const { title, english, description } = Astro.props
 ---
-<BaseLayout title={`${title} | ${localText(profile.name, lang)}`} {description} fontProfile="interface">
+<BaseLayout title={`${title} | ${siteName[lang]}`} {description} fontProfile="interface">
   <SiteHeader />
   <main class="mx-auto min-h-[75vh] max-w-3xl px-6 pb-24 pt-36 sm:pt-44">
     <header class="mb-12 border-b border-border pb-8">
