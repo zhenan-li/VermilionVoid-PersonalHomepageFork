@@ -1,6 +1,15 @@
 # VermilionVoid 双语个人网站模板
 
-基于 [VermilionVoid（朱墨留白）](https://github.com/Lapis0x0/VermilionVoid) 的 Astro 模板，包含博客、个人时间线、项目和简历页。默认仅有一篇 Hello World 测试文章。上游文章版权归原作者，许可说明见[上游 README](https://github.com/Lapis0x0/VermilionVoid#许可)。
+## 本 Fork 的改进
+
+- **[中英文界面与手写双语文章](#手写双语文章)**。两种语言各有可分享的网址。中英文稿可以分别撰写，用同一个 `translationKey` 配对。只有一份稿件时，另一种语言的界面仍可阅读原文。
+- **[按访问地区选择首页语言](#语言和访问入口)**。默认英文。部署到 Vercel 后，首次打开首页可按 IP 所在地区切换为中文。访客随时可以手动切换，之后优先使用记住的选择。
+- **[双语个人时间线](#个人经历时间线)**。按年展示经历，支持单日事件、起止日期、进行中的事项，以及文章和项目链接。附带中文版和英文版演示，样例数据见 [`journey.example.json`](src/data/journey.example.json)。
+- **[可直接复用的个人主页](#其他配置与部署)**。提供博客、个人时间线、项目和简历页。作者资料与个人条目默认留空，博客附带一篇 Hello World 测试文章。
+
+基于 [VermilionVoid（朱墨留白）](https://github.com/Lapis0x0/VermilionVoid) 的 Astro 模板。上游文章版权归原作者，许可说明见[上游 README](https://github.com/Lapis0x0/VermilionVoid#许可)。
+
+## 快速开始
 
 使用 Node.js 24 和 pnpm。运行 `pnpm install --frozen-lockfile` 安装依赖，`pnpm dev` 启动开发服务器，`pnpm build` 生成静态页面和 Pagefind 搜索索引，`pnpm preview` 查看发布版。
 
