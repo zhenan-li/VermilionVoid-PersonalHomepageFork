@@ -1,0 +1,17 @@
+---
+import JourneyTimeline from "@/components/JourneyTimeline.astro"
+import entries from "@/data/journey.example.json"
+import { languagePaths, routeLocale } from "@/data/languages"
+import ProfilePage from "@/layouts/ProfilePage.astro"
+
+export const getStaticPaths = languagePaths
+const lang = routeLocale(Astro.params.lang)
+const title = lang === "en" ? "Example timeline" : "示例时间线"
+const description = lang === "en"
+  ? "Three fictional milestones in the making of a personal website."
+  : "用三个虚构节点，演示一个个人网站从草图到开始写作的过程。"
+---
+<ProfilePage {title} english="Example timeline" {description}>
+  <p class="mb-8 text-muted-foreground">{description}</p>
+  <JourneyTimeline entries={entries} />
+</ProfilePage>

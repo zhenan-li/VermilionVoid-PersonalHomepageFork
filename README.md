@@ -27,7 +27,9 @@ translationKey: hello-world
 
 ## 个人经历时间线
 
-编辑 `src/data/journey.json`。空数组 `[]` 对应空时间线。填写后，`/en/journey/` 和 `/zh/journey/` 会按起始日期倒序、按年分组。文章归档位于各语言的 `/timeline/`。
+模板附带中英文演示页 `/zh/journey/demo/` 和 `/en/journey/demo/`。三个虚构节点展示单日事件、起止日期和进行中的事项。可以从空时间线进入演示页，或直接分享演示页链接。
+
+要填写自己的经历，可以参考 `src/data/journey.example.json` 中的示例，编辑 `src/data/journey.json`。空数组 `[]` 对应空时间线。填写后，`/en/journey/` 和 `/zh/journey/` 会按起始日期倒序、按年分组。文章归档位于各语言的 `/timeline/`。
 
 | 字段 | 用法 |
 | --- | --- |

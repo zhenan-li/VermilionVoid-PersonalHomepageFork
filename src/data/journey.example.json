@@ -1,0 +1,43 @@
+[
+  {
+    "id": "first-sketch",
+    "date": "2025-12-07",
+    "title": { "en": "Sketch the homepage", "zh": "画下首页草图" },
+    "description": {
+      "en": "One sheet of paper, three sections: writing, projects and a timeline.",
+      "zh": "在一张纸上画出三个栏目：文章、项目和时间线。"
+    }
+  },
+  {
+    "id": "bilingual-layout",
+    "date": "2026-01-12",
+    "end": "2026-02-08",
+    "title": { "en": "Try a bilingual layout", "zh": "试排双语页面" },
+    "description": {
+      "en": "Try long English titles and short Chinese ones on a phone, then adjust the spacing.",
+      "zh": "把较长的英文标题和较短的中文标题放到手机上试排，再调整间距。"
+    },
+    "links": [
+      {
+        "label": { "en": "Explore the theme source", "zh": "查看主题源码" },
+        "href": "https://github.com/Lapis0x0/VermilionVoid"
+      }
+    ]
+  },
+  {
+    "id": "public-notebook",
+    "date": "2026-11-24",
+    "end": "ongoing",
+    "title": { "en": "Keep a public notebook", "zh": "开始写公开笔记" },
+    "description": {
+      "en": "Start with a two-word post. Add a note whenever there is something worth keeping.",
+      "zh": "用两个英文单词写下第一篇。往后遇到值得留下的想法，就记一笔。"
+    },
+    "links": [
+      {
+        "label": { "en": "Read Hello World", "zh": "阅读 Hello World" },
+        "href": "/posts/hello-world/"
+      }
+    ]
+  }
+]
