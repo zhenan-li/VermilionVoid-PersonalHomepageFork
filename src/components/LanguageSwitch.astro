@@ -1,0 +1,20 @@
+---
+import { routeLocale } from "@/data/languages"
+const lang = routeLocale(Astro.params.lang)
+const other = lang === "en" ? "zh" : "en"
+const href = Astro.url.pathname.replace(/^\/(en|zh)(?=\/|$)/, "/" + other)
+---
+<a href={href} lang={other} hreflang={other} data-astro-reload data-language={other}
+  class="shrink-0 px-2 py-1 text-sm font-medium text-foreground hover:text-primary"
+  aria-label={other === "zh" ? "切换到中文" : "Switch to English"}>{other === "zh" ? "中文" : "EN"}</a>
+<script>
+  document.addEventListener("click", event => {
+    const link = event.target instanceof Element && event.target.closest<HTMLAnchorElement>("a[data-language]")
+    if (!link) return
+    const target = new URL(link.href)
+    target.search = location.search
+    target.hash = location.hash
+    link.href = target.href
+    document.cookie = "site_lang=" + link.dataset.language + "; Path=/; Max-Age=31536000; SameSite=Lax"
+  }, true)
+</script>

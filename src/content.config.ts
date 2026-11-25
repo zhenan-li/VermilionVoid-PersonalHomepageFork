@@ -12,7 +12,8 @@ const posts = defineCollection({
     image: z.string().optional().default(""),
     tags: z.array(z.string()).optional().default([]),
     category: z.string().optional().nullable().default(""),
-    lang: z.string().optional().default(""),
+    lang: z.string().optional(),
+    translationKey: z.string().regex(/^[\p{L}\p{N}_-]+(?:\/[\p{L}\p{N}_-]+)*$/u).optional(),
     pinned: z.boolean().optional().default(false),
 
     encrypted: z.boolean().optional().default(false),

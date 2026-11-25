@@ -1,6 +1,4 @@
 ---
-import ProfilePage from "@/layouts/ProfilePage.astro"
+import { defaultLocale } from "@/data/languages"
+return Astro.redirect(`/${defaultLocale}/cv/`)
 ---
-<ProfilePage title="简历" english="Curriculum Vitae" description="李哲楠的公开简历和项目选录。">
-  <p class="text-muted-foreground">简历待更新。</p>
-</ProfilePage>

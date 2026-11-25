@@ -1,6 +1,8 @@
+import type { Locale } from "@/data/languages"
+import { msg } from "@/lib/ui"
 import { cn } from "@/lib/utils"
 
-export function ThemeToggle({ className }: { className?: string }) {
+export function ThemeToggle({ className, lang }: { className?: string; lang: Locale }) {
   return (
     <button
       data-theme-toggle
@@ -9,7 +11,7 @@ export function ThemeToggle({ className }: { className?: string }) {
         "hover:bg-muted",
         className
       )}
-      aria-label="切换主题"
+      aria-label={msg(lang, "切换主题")}
     >
       {/* 太阳图标 */}
       <svg

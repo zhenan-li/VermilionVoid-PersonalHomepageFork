@@ -1,5 +1,7 @@
 "use client"
 
+import type { Locale } from "@/data/languages"
+import { msg } from "@/lib/ui"
 import type { CSSProperties, KeyboardEvent, MouseEvent } from "react"
 import { Calendar, Folder, Hash, ChevronRight } from "lucide-react"
 import type { ArticleMeta } from "./article-list"
@@ -7,20 +9,22 @@ import { cn } from "@/lib/utils"
 import { navigate } from "astro:transitions/client"
 
 export function ArticleCard({
+  lang,
   article,
   className,
   style,
 }: {
+  lang: Locale
   article: ArticleMeta
   className?: string
   style?: CSSProperties
 }) {
   const primaryTag = article.tags?.[0]
-  const wordCount = article.wordCount ? `${article.wordCount} 字` : "——"
+  const wordCount = article.wordCount ? `${article.wordCount} ${lang === "en" ? "words" : "字"}` : "——"
   const readTime = article.readTime ?? "——"
-  const categoryHref = `/?category=${encodeURIComponent(article.category)}#home-main`
-  const tagHref = primaryTag ? `/?tag=${encodeURIComponent(primaryTag)}#home-main` : undefined
-  const postHref = `/posts/${article.slug}/`
+  const categoryHref = `/${lang}/?category=${encodeURIComponent(article.category)}#home-main`
+  const tagHref = primaryTag ? `/${lang}/?tag=${encodeURIComponent(primaryTag)}#home-main` : undefined
+  const postHref = `/${lang}/posts/${article.slug}/`
 
   const handleCardClick = (event: MouseEvent<HTMLElement>) => {
     const target = event.target as HTMLElement
@@ -43,14 +47,14 @@ export function ArticleCard({
       style={style}
       role="link"
       tabIndex={0}
-      aria-label={`阅读：${article.title}`}
+      aria-label={`${lang === "en" ? "Read: " : "阅读："}${article.title}`}
       onClick={handleCardClick}
       onKeyDown={handleCardKeyDown}
     >
       {/* Pinned indicator */}
       {article.pinned && (
         <span className="absolute top-4 right-4 text-[11px] font-medium tracking-wide text-muted-foreground/80">
-          置顶
+          {msg(lang, "置顶")}
         </span>
       )}
 
@@ -92,7 +96,7 @@ export function ArticleCard({
             ) : (
               <span className="flex items-center gap-1.5">
                 <Hash className="w-3.5 h-3.5" />
-                未标签
+                {msg(lang, "未标签")}
               </span>
             )}
           </div>

@@ -1,36 +1,8 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro"
-import { ArticleList } from "@/components/article-list"
-import { Footer } from "@/components/footer"
-import SiteHeader from "@/components/site-header.astro"
-import { Hero } from "@/components/hero"
-import { PAGE_SIZE } from "@/lib/constants"
-import { buildSidebarMeta, getSortedPosts, toPostMeta } from "@/lib/posts"
-
-const title = "李哲楠的手记 | Zhenan Li"
-const description = "李哲楠的文章、项目和个人经历。"
-const posts = await getSortedPosts()
-const allArticles = posts.map((post) => toPostMeta(post))
-const sidebarMeta = buildSidebarMeta(allArticles)
+import { defaultLocale } from "@/data/languages"
 ---
-
-<BaseLayout {title} {description} fontProfile="interface">
-  <div class="min-h-screen bg-background dark:bg-surface-subtle">
-    <SiteHeader />
-    <main>
-      <Hero client:idle />
-      <section id="home-main" class="scroll-mt-24">
-        <ArticleList
-          client:visible
-          articles={allArticles}
-          title="全部文章"
-          showViewAll={false}
-          pagination={{ currentPage: 1, pageSize: PAGE_SIZE, basePath: "/" }}
-          sidebarCategories={sidebarMeta.categories}
-          sidebarTags={sidebarMeta.tags}
-        />
-      </section>
-    </main>
-    <Footer />
-  </div>
-</BaseLayout>
+<!doctype html><html lang={defaultLocale}><head><meta charset="utf-8" /><title>Personal homepage</title>
+<script is:inline define:vars={{defaultLocale}}>
+  const saved = document.cookie.match(/(?:^|; )site_lang=(en|zh)(?:;|$)/)?.[1]
+  location.replace("/" + (saved || defaultLocale) + "/" + location.search + location.hash)
+</script><noscript><meta http-equiv="refresh" content={"0;url=/" + defaultLocale + "/"} /></noscript></head><body><a href="/en/" lang="en">English</a> · <a href="/zh/" lang="zh">中文</a></body></html>

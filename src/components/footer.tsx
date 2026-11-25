@@ -1,4 +1,6 @@
-import { navItems } from "@/data/navigation"
+import { localText, siteName, type Locale } from "@/data/languages"
+import { msg } from "@/lib/ui"
+import { navigation } from "@/data/navigation"
 import type { ComponentType, SVGProps } from "react"
 import { Github, Music, Rss } from "lucide-react"
 import { profile, type ExternalProfileLink, type ExternalProfileLinkType } from "@/data/profile"
@@ -10,7 +12,8 @@ const iconMap: Record<ExternalProfileLinkType, ComponentType<SVGProps<SVGSVGElem
   github: Github,
 }
 
-export function Footer() {
+export function Footer({ lang }: { lang: Locale }) {
+  const navItems = navigation(lang)
   return (
     <footer className="border-t border-border/50 bg-background">
       <div className="max-w-6xl mx-auto px-6 py-16">
@@ -21,23 +24,23 @@ export function Footer() {
               <div className="w-8 h-8 rounded-full overflow-hidden border border-primary/20 bg-secondary">
                 <img
                   src={profile.avatar}
-                  alt={profile.name}
+                  alt={localText(profile.name, lang)}
                   loading="lazy"
                   decoding="async"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <span className="text-foreground font-medium">李哲楠的手记</span>
+              <span className="text-foreground font-medium">{siteName[lang]}</span>
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              {profile.bio}
+              {localText(profile.bio, lang)}
             </p>
           </div>
 
           {/* Navigation */}
           <div className="md:flex md:justify-center">
             <div>
-              <h4 className="text-sm font-medium text-foreground mb-4 uppercase tracking-wide">导航</h4>
+              <h4 className="text-sm font-medium text-foreground mb-4 uppercase tracking-wide">{msg(lang, "导航")}</h4>
               <nav className="flex flex-col gap-3">
               {navItems.map((item) => (
                 <a
@@ -57,7 +60,7 @@ export function Footer() {
           {/* Connect */}
           <div className="md:flex md:justify-end">
             <div>
-              <h4 className="text-sm font-medium text-foreground mb-4 uppercase tracking-wide">联系</h4>
+              <h4 className="text-sm font-medium text-foreground mb-4 uppercase tracking-wide">{msg(lang, "联系")}</h4>
               <div className="flex items-center gap-4">
                 {profile.links.filter((link): link is ExternalProfileLink => link.type !== "wechat").map((link) => {
                   const Icon = iconMap[link.type]
@@ -75,15 +78,15 @@ export function Footer() {
                   )
                 })}
               </div>
-              <p className="text-muted-foreground text-sm mt-6">通过 RSS 订阅，获取最新文章更新。</p>
+              <p className="text-muted-foreground text-sm mt-6">{msg(lang, "通过 RSS 订阅，获取最新文章更新。")}</p>
               <a
-                href="/rss.xml"
+                href={"/" + lang + "/rss.xml"}
                 target="_blank"
                 rel="noreferrer"
                 className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 transition-opacity duration-200"
               >
                 <Rss className="w-4 h-4" />
-                订阅 RSS
+                {msg(lang, "订阅 RSS")}
               </a>
             </div>
           </div>
@@ -91,7 +94,7 @@ export function Footer() {
 
         {/* Bottom */}
         <div className="mt-16 pt-8 border-t border-border/50 grid gap-4 md:grid-cols-3">
-          <p className="text-muted-foreground text-sm">© {new Date().getFullYear()} 李哲楠</p>
+          <p className="text-muted-foreground text-sm">© {new Date().getFullYear()} {localText(profile.name, lang)}</p>
           <a
             href="https://github.com/Lapis0x0/VermilionVoid"
             target="_blank"
@@ -99,7 +102,7 @@ export function Footer() {
             className="flex items-center gap-2 text-muted-foreground text-xs hover:text-foreground transition-colors duration-200 group md:justify-end md:pr-4"
           >
             <Github className="w-3.5 h-3.5" />
-            <span>博客主题：朱墨留白 | VermilionVoid</span>
+            <span>{msg(lang, "博客主题：朱墨留白 | VermilionVoid")}</span>
           </a>
         </div>
       </div>

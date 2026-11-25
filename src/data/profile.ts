@@ -1,3 +1,5 @@
+import type { LocalText } from "./languages"
+
 export type ExternalProfileLinkType = "qq" | "music" | "github"
 export type ProfileLinkType = ExternalProfileLinkType | "wechat"
 
@@ -18,13 +20,13 @@ export interface QrProfileLink {
 export type ProfileLink = ExternalProfileLink | QrProfileLink
 
 export const profile: {
-  name: string
-  bio: string
+  name: LocalText
+  bio: LocalText
   avatar: string
   links: ProfileLink[]
 } = {
-  name: "李哲楠",
-  bio: "文章、实验与项目手记。",
+  name: { zh: "李哲楠", en: "Zhenan Li" },
+  bio: { zh: "文章、实验与项目手记。", en: "Writing, experiments and project notes." },
   avatar: "/mark.png",
   links: [{ type: "github", name: "GitHub", url: "https://github.com/zhenan-li" }],
 }

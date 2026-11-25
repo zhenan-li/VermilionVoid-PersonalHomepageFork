@@ -34,7 +34,13 @@ export const disclaimers: Record<string, DisclaimerConfig> = {
  * @param types 声明类型数组或逗号分隔的字符串
  * @returns 声明配置数组
  */
-export function getDisclaimers(types: string | string[]): DisclaimerConfig[] {
+const english: Record<string, { title: string; content: string }> = {
+  暴论: { title: "Opinion", content: "This post shares a personal view that may be incomplete or controversial." },
+  免责声明: { title: "Disclaimer", content: "This post is for reference. It does not constitute professional advice." },
+  过时内容: { title: "Older post", content: "This post is over a year old. Some details may have changed since publication." },
+}
+
+export function getDisclaimers(types: string | string[], locale: "en" | "zh"): DisclaimerConfig[] {
 	if (!types) return [];
 
 	const typeArray = Array.isArray(types)
@@ -43,5 +49,5 @@ export function getDisclaimers(types: string | string[]): DisclaimerConfig[] {
 
 	return typeArray
 		.filter((type) => disclaimers[type])
-		.map((type) => disclaimers[type]);
+		.map((type) => locale === "en" ? { ...disclaimers[type], ...english[type] } : disclaimers[type]);
 }

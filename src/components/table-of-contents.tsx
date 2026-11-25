@@ -1,5 +1,7 @@
 "use client"
 
+import type { Locale } from "@/data/languages"
+import { msg } from "@/lib/ui"
 import { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import { cn } from "@/lib/utils"
 
@@ -10,6 +12,7 @@ interface TocItem {
 }
 
 interface TableOfContentsProps {
+  lang: Locale
   /**
    * rail：桌面侧栏。顶部在文章大标题滚出视口后淡入标题，二级标题按所在章节手风琴展开，底部字符进度条。
    * list：手机抽屉。只有目录树，二级标题全部展开。
@@ -67,7 +70,7 @@ const EASE_OUT = "ease-[cubic-bezier(.19,1,.22,1)]"
 
 type TocGroup = { head: TocItem | null; subs: TocItem[] }
 
-export function TableOfContents({ variant = "rail", title }: TableOfContentsProps) {
+export function TableOfContents({ variant = "rail", title, lang }: TableOfContentsProps) {
   const [headings, setHeadings] = useState<TocItem[]>([])
   const [activeId, setActiveId] = useState<string>("")
   const navRef = useRef<HTMLElement | null>(null)
@@ -449,7 +452,7 @@ export function TableOfContents({ variant = "rail", title }: TableOfContentsProp
 
   if (!isRail) {
     return (
-      <nav ref={navRef} aria-label="目录" className="toc-nav">
+      <nav ref={navRef} aria-label={msg(lang, "目录")} className="toc-nav">
         {tree}
       </nav>
     )
@@ -458,7 +461,7 @@ export function TableOfContents({ variant = "rail", title }: TableOfContentsProp
   const filled = Math.round((percent / 100) * cells)
 
   return (
-    <nav ref={navRef} aria-label="目录" className="toc-nav flex max-h-[calc(100dvh-8rem)] flex-col">
+    <nav ref={navRef} aria-label={msg(lang, "目录")} className="toc-nav flex max-h-[calc(100dvh-8rem)] flex-col">
       {title && (
         <div
           aria-hidden={!titleShown}
@@ -472,7 +475,7 @@ export function TableOfContents({ variant = "rail", title }: TableOfContentsProp
           {title}
         </div>
       )}
-      <div className="mb-3 shrink-0 font-mono text-[11px] tracking-[0.2em] text-muted-foreground">目录</div>
+      <div className="mb-3 shrink-0 font-mono text-[11px] tracking-[0.2em] text-muted-foreground">{msg(lang, "目录")}</div>
       <div className="toc-scroll-container toc-scrollbar min-h-0 overflow-y-auto overscroll-contain pr-2">
         {tree}
       </div>
@@ -481,7 +484,7 @@ export function TableOfContents({ variant = "rail", title }: TableOfContentsProp
       <div
         className="mt-6 flex shrink-0 items-baseline gap-2.5 font-mono text-[12px]"
         role="progressbar"
-        aria-label="阅读进度"
+        aria-label={msg(lang, "阅读进度")}
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={percent}

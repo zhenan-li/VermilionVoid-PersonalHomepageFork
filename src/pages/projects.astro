@@ -1,15 +1,4 @@
 ---
-import ProfilePage from "@/layouts/ProfilePage.astro"
-import { projects } from "@/data/projects"
+import { defaultLocale } from "@/data/languages"
+return Astro.redirect(`/${defaultLocale}/projects/`)
 ---
-<ProfilePage title="项目" english="Projects" description="项目介绍和源代码。">
-  {projects.length === 0 && <p class="text-muted-foreground">暂无公开项目。</p>}
-  {projects.map(project => (
-    <article id={project.id} class="mb-10 scroll-mt-24 border-b border-border pb-8">
-      <p class="mb-2 font-mono text-xs text-muted-foreground" lang="en">{project.english}</p>
-      <h2 class="font-serif text-2xl font-semibold">{project.title}</h2>
-      <p class="my-4 max-w-prose leading-7 text-content-secondary">{project.description}</p>
-      <a href={project.url} class="text-sm font-medium text-primary underline underline-offset-4">查看源码 ↗</a>
-    </article>
-  ))}
-</ProfilePage>

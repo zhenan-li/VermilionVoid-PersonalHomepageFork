@@ -1,5 +1,7 @@
 "use client"
 
+import type { Locale } from "@/data/languages"
+import { msg } from "@/lib/ui"
 import { useMemo, useState, useEffect, useRef, useCallback } from "react"
 import type { MouseEvent } from "react"
 import { ArticleCard } from "./article-card"
@@ -48,7 +50,7 @@ const normalizeBasePath = (basePath: string) => {
 
 const getPageHref = (pageNumber: number, basePath: string) => {
   const base = normalizeBasePath(basePath)
-  if (pageNumber === 1) return base || "/"
+  if (pageNumber === 1) return base + "/"
   return `${base}/${pageNumber}/`
 }
 
@@ -88,14 +90,16 @@ const buildPageRange = (currentPage: number, totalPages: number) => {
 }
 
 export function ArticleList({
+  lang,
   articles,
-  title = "近期文章",
+  title = msg(lang, "近期文章"),
   showViewAll = true,
   pagination,
   sidebarCategories,
   sidebarTags,
   sidebarThoughts,
 }: {
+  lang: Locale
   articles: ArticleMeta[]
   title?: string
   showViewAll?: boolean
@@ -120,7 +124,7 @@ export function ArticleList({
       counts.get(article.category)!.count += 1
     })
     return [
-      { id: "all", name: "全部", count: articles.length },
+      { id: "all", name: msg(lang, "全部"), count: articles.length },
       ...Array.from(counts.values()).sort((a, b) => a.name.localeCompare(b.name)),
     ]
   }, [articles])
@@ -132,7 +136,7 @@ export function ArticleList({
     const hasAll = sidebarCategories.some((category) => category.id === "all")
     if (hasAll) return sidebarCategories
     const total = sidebarCategories.reduce((sum, category) => sum + category.count, 0)
-    return [{ id: "all", name: "全部", count: total }, ...sidebarCategories]
+    return [{ id: "all", name: msg(lang, "全部"), count: total }, ...sidebarCategories]
   }, [computedCategories, sidebarCategories])
 
   const computedTags = useMemo(() => {
@@ -204,7 +208,7 @@ export function ArticleList({
   const headerMeta = useMemo(() => {
     if (activeTag) {
       return {
-        eyebrow: "标签",
+        eyebrow: msg(lang, "标签"),
         heading: activeTag,
       }
     }
@@ -212,7 +216,7 @@ export function ArticleList({
     if (activeCategory !== "all") {
       const currentCategory = categories.find((category) => category.id === activeCategory)
       return {
-        eyebrow: "分类",
+        eyebrow: msg(lang, "分类"),
         heading: currentCategory?.name ?? activeCategory,
       }
     }
@@ -329,7 +333,7 @@ export function ArticleList({
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar */}
           <div className="order-2 lg:order-1 onload-animation" style={{ animationDelay: "100ms" }}>
-            <Sidebar
+            <Sidebar lang={lang}
               categories={categories}
               tags={tags}
               activeCategory={activeCategory}
@@ -346,7 +350,7 @@ export function ArticleList({
           <div className="order-1 lg:order-2 flex-1 space-y-4">
             {pagedArticles.length > 0 ? (
               pagedArticles.map((article, index) => (
-                <ArticleCard
+                <ArticleCard lang={lang}
                   key={article.slug}
                   article={article}
                   className="onload-animation"
@@ -354,17 +358,17 @@ export function ArticleList({
                 />
               ))
             ) : (
-              <div className="text-center py-12 text-muted-foreground">暂无符合条件的文章</div>
+              <div className="text-center py-12 text-muted-foreground">{msg(lang, "暂无符合条件的文章")}</div>
             )}
 
             {/* View all link */}
             {showViewAll && (
               <div className="pt-8 text-center">
                 <a
-                  href="/posts/"
+                  href={"/" + lang + "/timeline/"}
                   className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors duration-200 group"
                 >
-                  <span>查看全部文章</span>
+                  <span>{msg(lang, "查看全部文章")}</span>
                   <svg
                     className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1"
                     fill="none"
@@ -392,7 +396,7 @@ export function ArticleList({
                         onClick={previousUrl ? handlePageClick(currentPage - 1) : undefined}
                       >
                         <ChevronLeft className="size-4" />
-                        <span className="hidden sm:block">上一页</span>
+                        <span className="hidden sm:block">{msg(lang, "上一页")}</span>
                       </PaginationLink>
                     </PaginationItem>
 
@@ -422,7 +426,7 @@ export function ArticleList({
                         rel={nextUrl ? "next" : undefined}
                         onClick={nextUrl ? handlePageClick(currentPage + 1) : undefined}
                       >
-                        <span className="hidden sm:block">下一页</span>
+                        <span className="hidden sm:block">{msg(lang, "下一页")}</span>
                         <ChevronRight className="size-4" />
                       </PaginationLink>
                     </PaginationItem>

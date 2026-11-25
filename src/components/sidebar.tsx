@@ -1,11 +1,14 @@
 "use client"
 
+import { localText, type Locale } from "@/data/languages"
+import { msg } from "@/lib/ui"
 import { useState, type ReactNode } from "react"
 import { cn } from "@/lib/utils"
 import { profile } from "@/data/profile"
 import { ProfileContactLink } from "@/components/profile-contact-link"
 
 interface SidebarProps {
+  lang: Locale
   categories: { id: string; name: string; count: number }[]
   tags: string[]
   activeCategory: string
@@ -19,6 +22,7 @@ interface SidebarProps {
 }
 
 export function Sidebar({
+  lang,
   categories,
   tags,
   activeCategory,
@@ -43,15 +47,15 @@ export function Sidebar({
         <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden border-2 border-primary/20">
           <img
             src={profile.avatar}
-            alt={profile.name}
+            alt={localText(profile.name, lang)}
             loading="lazy"
             decoding="async"
             className="w-full h-full object-cover"
           />
         </div>
-        <h3 className="font-serif text-xl font-bold text-foreground mb-1">{profile.name}</h3>
+        <h3 className="font-serif text-xl font-bold text-foreground mb-1">{localText(profile.name, lang)}</h3>
         <div className="w-8 h-0.5 bg-primary mx-auto mb-3" />
-        <p className="text-sm text-muted-foreground leading-relaxed mb-4">{profile.bio}</p>
+        <p className="text-sm text-muted-foreground leading-relaxed mb-4">{localText(profile.bio, lang)}</p>
 
         {/* Social Links */}
         <div className="flex items-center justify-center gap-3 mb-4">
@@ -73,7 +77,7 @@ export function Sidebar({
       <div className="bg-card border border-border/50 rounded-xl p-5">
         <div className="flex items-center gap-2 mb-4">
           <div className="w-1 h-4 bg-primary rounded-full" />
-          <h4 className="font-medium text-foreground">分类</h4>
+          <h4 className="font-medium text-foreground">{msg(lang, "分类")}</h4>
         </div>
         <div className="space-y-1">
           {visibleCategories.map((category) => (
@@ -107,7 +111,7 @@ export function Sidebar({
             className="w-full mt-3 text-sm text-primary hover:text-primary/80 transition-colors flex items-center justify-center gap-2"
           >
             <span className="tracking-widest text-primary/70">•••</span>
-            更多
+            {msg(lang, "更多")}
           </button>
         )}
       </div>
@@ -116,7 +120,7 @@ export function Sidebar({
       <div className="bg-card border border-border/50 rounded-xl p-5">
         <div className="flex items-center gap-2 mb-4">
           <div className="w-1 h-4 bg-primary rounded-full" />
-          <h4 className="font-medium text-foreground">标签</h4>
+          <h4 className="font-medium text-foreground">{msg(lang, "标签")}</h4>
         </div>
         <div className="flex flex-wrap gap-2">
           {tags.map((tag) => (

@@ -1,8 +1,12 @@
 ---
+import { languages, routeLocale, siteName, siteDescription, type Locale } from "@/data/languages"
 import "@/styles/global.css"
 import { ClientRouter } from "astro:transitions"
 
+const lang = routeLocale(Astro.params.lang)
+
 interface Props {
+  alternateLocales?: readonly Locale[]
   title?: string
   description?: string
   canonical?: string
@@ -18,13 +22,14 @@ interface Props {
   fontProfile?: "reading" | "interface"
 }
 
-const defaultTitle = "李哲楠的手记 | Zhenan Li"
-const defaultDescription = "李哲楠的文章、项目和个人经历。"
+const defaultTitle = siteName[lang]
+const defaultDescription = siteDescription[lang]
 
 const {
   title = defaultTitle,
   description = defaultDescription,
   canonical,
+  alternateLocales = languages,
   ogType = "website",
   ogTitle,
   ogDescription,
@@ -56,7 +61,7 @@ const resolvedTwitterDescription = twitterDescription || description
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang={lang === "zh" ? "zh-CN" : "en"}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -64,19 +69,22 @@ const resolvedTwitterDescription = twitterDescription || description
     <meta name="description" content={description} />
     {robots ? <meta name="robots" content={robots} /> : null}
     <link rel="canonical" href={canonicalUrl} />
+    {alternateLocales.map(locale => (
+      <link rel="alternate" hreflang={locale} href={new URL(Astro.url.pathname.replace(/^\/(en|zh)(?=\/|$)/, "/" + locale), Astro.site ?? Astro.url).href} />
+    ))}
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={resolvedOgTitle} />
     <meta property="og:description" content={resolvedOgDescription} />
     <meta property="og:url" content={resolvedOgUrl} />
-    <meta property="og:site_name" content="李哲楠的手记" />
-    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content={siteName[lang]} />
+    <meta property="og:locale" content={lang === "zh" ? "zh_CN" : "en_US"} />
     {resolvedOgImage ? <meta property="og:image" content={resolvedOgImage} /> : null}
     <meta name="twitter:card" content={resolvedTwitterCard} />
     <meta name="twitter:title" content={resolvedTwitterTitle} />
     <meta name="twitter:description" content={resolvedTwitterDescription} />
     {resolvedOgImage ? <meta name="twitter:image" content={resolvedOgImage} /> : null}
     <slot name="head" />
-    <link rel="alternate" type="application/rss+xml" title="李哲楠的手记" href="/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title={siteName[lang]} href={"/" + lang + "/rss.xml"} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     {useHarmonySans ? <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin /> : null}

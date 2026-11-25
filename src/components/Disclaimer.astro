@@ -1,4 +1,5 @@
 ---
+import { routeLocale } from "@/data/languages";
 import { getDisclaimers } from "../data/disclaimers";
 
 export interface Props {
@@ -41,7 +42,7 @@ if (
 	finalDisclaimers.push("过时内容");
 }
 
-const disclaimerConfigs = getDisclaimers(finalDisclaimers);
+const disclaimerConfigs = getDisclaimers(finalDisclaimers, routeLocale(Astro.params.lang));
 ---
 
 {disclaimerConfigs.length > 0 && (

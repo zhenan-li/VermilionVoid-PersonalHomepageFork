@@ -1,14 +1,20 @@
 "use client"
 
+import { localText, siteName, type Locale } from "@/data/languages"
+import { profile } from "@/data/profile"
+import { msg } from "@/lib/ui"
 import { useEffect, useRef, useState, useCallback } from "react"
 
-const phrases = [
+const chinese = [
   { prefix: "关于", highlight: "物理" },
   { prefix: "关于", highlight: "计算" },
   { prefix: "关于", highlight: "思考" },
 ]
 
-export function Hero() {
+const english = ["physics", "computing", "ideas"].map(highlight => ({ prefix: "On ", highlight }))
+
+export function Hero({ lang }: { lang: Locale }) {
+  const phrases = lang === "en" ? english : chinese
   const [mounted, setMounted] = useState(true)
   const [phraseIndex, setPhraseIndex] = useState(0)
   const [displayText, setDisplayText] = useState(phrases[0].prefix + phrases[0].highlight)
@@ -140,7 +146,7 @@ export function Hero() {
           }`}
         >
           <p className="text-[0.65rem] sm:text-xs tracking-[0.4em] text-muted-foreground/60 uppercase mb-8">
-            Zhenan Li · Personal Notes
+            {siteName[lang]}
           </p>
 
           <h1 className="font-sans text-[min(10.5vw,3rem)] sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-foreground leading-[1.1] mb-8 min-h-[1.2em] whitespace-nowrap">
@@ -151,7 +157,7 @@ export function Hero() {
           </h1>
 
           <p className="max-w-xl mx-auto mb-10 font-serif text-content-secondary text-base sm:text-lg leading-relaxed">
-            李哲楠的文章与项目手记
+            {localText(profile.bio, lang)}
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -160,7 +166,7 @@ export function Hero() {
               onClick={handleBrowseClick}
               className="group flex items-center gap-2 px-8 py-3 bg-foreground text-background rounded-full font-medium text-sm hover:bg-foreground/90 transition-all duration-300"
             >
-              浏览文章
+              {msg(lang, "浏览文章")}
               <svg
                 className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
                 fill="none"
@@ -171,10 +177,10 @@ export function Hero() {
               </svg>
             </a>
             <a
-              href="/projects/"
+              href={"/" + lang + "/projects/"}
               className="px-8 py-3 border border-border rounded-full font-medium text-sm text-foreground hover:border-foreground/40 transition-all duration-300"
             >
-              查看项目
+              {msg(lang, "查看项目")}
             </a>
           </div>
         </div>

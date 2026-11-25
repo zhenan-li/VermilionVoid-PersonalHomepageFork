@@ -1,0 +1,10 @@
+---
+import { languagePaths, routeLocale } from "@/data/languages"
+export const getStaticPaths = languagePaths
+const lang = routeLocale(Astro.params.lang)
+import { msg } from "@/lib/ui"
+import ProfilePage from "@/layouts/ProfilePage.astro"
+---
+<ProfilePage title={msg(lang, "简历")} english="Curriculum Vitae" description={lang === "en" ? "Curriculum vitae." : "个人简历。"}>
+  <p class="text-muted-foreground">{msg(lang, "简历待更新。")}</p>
+</ProfilePage>

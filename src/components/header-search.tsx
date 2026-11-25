@@ -1,5 +1,7 @@
 "use client"
 
+import type { Locale } from "@/data/languages"
+import { msg } from "@/lib/ui"
 import { useEffect, useState, useRef, useCallback } from "react"
 import { createPortal } from "react-dom"
 import { cn } from "@/lib/utils"
@@ -24,7 +26,7 @@ declare global {
   }
 }
 
-export function HeaderSearch() {
+export function HeaderSearch({ lang }: { lang: Locale }) {
   const [query, setQuery] = useState("")
   const [results, setResults] = useState<PagefindResult[]>([])
   const [isOpen, setIsOpen] = useState(false)
@@ -200,7 +202,7 @@ export function HeaderSearch() {
               setIsFocused(true)
               requestPagefindLoad()
             }}
-            placeholder="搜索..."
+            placeholder={msg(lang, "搜索...")}
             className={cn(
               "bg-transparent text-sm outline-none h-full px-2",
               "text-foreground placeholder:text-muted-foreground",
@@ -221,7 +223,7 @@ export function HeaderSearch() {
           if (!isOpen) focusSearchInput(100)
         }}
         className="md:hidden p-2 text-muted-foreground hover:text-foreground transition-colors"
-        aria-label="搜索"
+        aria-label={msg(lang, "搜索")}
       >
         <SearchIcon className="w-5 h-5" />
       </button>
@@ -246,7 +248,7 @@ export function HeaderSearch() {
               setIsFocused(true)
               requestPagefindLoad()
             }}
-            placeholder="搜索..."
+            placeholder={msg(lang, "搜索...")}
             className="flex-1 bg-transparent text-sm outline-none px-2 text-foreground placeholder:text-muted-foreground"
           />
           </div>
@@ -255,7 +257,7 @@ export function HeaderSearch() {
         {/* Dev mode notice */}
         {!isProd && (
           <div className="p-3 text-xs text-muted-foreground border-b border-border">
-            搜索仅在生产构建后可用
+            {msg(lang, "搜索仅在生产构建后可用")}
           </div>
         )}
 
@@ -263,12 +265,12 @@ export function HeaderSearch() {
         <div className="max-h-80 overflow-y-auto">
           {isProd && query.trim() && results.length === 0 && (
             <div className="p-4 text-sm text-muted-foreground text-center">
-              未找到相关结果
+              {msg(lang, "未找到相关结果")}
             </div>
           )}
 
           {results.map((result) => (
-            <SearchResultItem key={result.id} result={result} onSelect={() => setIsOpen(false)} />
+            <SearchResultItem lang={lang} key={result.id} result={result} onSelect={() => setIsOpen(false)} />
           ))}
         </div>
       </div>
@@ -276,7 +278,7 @@ export function HeaderSearch() {
   )
 }
 
-function SearchResultItem({ result, onSelect }: { result: PagefindResult; onSelect: () => void }) {
+function SearchResultItem({ result, onSelect, lang }: { lang: Locale; result: PagefindResult; onSelect: () => void }) {
   const [data, setData] = useState<{
     url: string
     excerpt: string
@@ -295,7 +297,7 @@ function SearchResultItem({ result, onSelect }: { result: PagefindResult; onSele
   if (!data) {
     return (
       <div className="px-4 py-3 text-sm text-muted-foreground animate-pulse">
-        加载中...
+        {msg(lang, "加载中...")}
       </div>
     )
   }
@@ -307,7 +309,7 @@ function SearchResultItem({ result, onSelect }: { result: PagefindResult; onSele
       className="block px-4 py-3 hover:bg-muted/50 transition-colors border-b border-border last:border-b-0"
     >
       <div className="font-medium text-sm text-foreground line-clamp-1">
-        {data.meta?.title || data.title || "未命名"}
+        {data.meta?.title || data.title || msg(lang, "未命名")}
       </div>
       <div
         className="text-xs text-muted-foreground mt-1 line-clamp-2"

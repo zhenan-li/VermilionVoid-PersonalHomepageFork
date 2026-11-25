@@ -1,3 +1,4 @@
+import type { Locale } from "@/data/languages"
 import { getCollection, type CollectionEntry } from "astro:content"
 import readingTime from "reading-time"
 
@@ -52,16 +53,16 @@ export async function getPostsWithNav(): Promise<PostEntry[]> {
   return sorted
 }
 
-export const toPostMeta = (post: PostEntry) => {
+export const toPostMeta = (post: PostEntry, lang: Locale = "en") => {
   const body = typeof post.body === "string" ? post.body : String(post.body || "")
   const stats = readingTime(body)
   const words = stats.words
   const minutes = Math.max(1, Math.round(stats.minutes))
   const excerptSource = post.data.description?.trim() || ""
-  const fallbackExcerpt = stripMarkdown(body).slice(0, 140)
+  const fallbackExcerpt = post.data.encrypted ? "" : stripMarkdown(body).slice(0, 140)
   const excerpt = excerptSource.length > 0 ? excerptSource : fallbackExcerpt
   const tags = post.data.tags?.length ? post.data.tags : []
-  const category = (post.data.category ?? "").toString().trim() || "未分类"
+  const category = (post.data.category ?? "").toString().trim() || (lang === "en" ? "Uncategorized" : "未分类")
 
   return {
     slug: post.id,
@@ -72,13 +73,13 @@ export const toPostMeta = (post: PostEntry) => {
     tags,
     date: formatDate(post.data.published),
     wordCount: words,
-    readTime: `${minutes} 分钟`,
+    readTime: String(minutes) + (lang === "en" ? " min" : " 分钟"),
     image: post.data.image || undefined,
     pinned: post.data.pinned ?? false,
   }
 }
 
-export const buildSidebarMeta = (articles: { category: string; categoryLabel: string; tags: string[] }[]) => {
+export const buildSidebarMeta = (articles: { category: string; categoryLabel: string; tags: string[] }[], lang: Locale = "en") => {
   const counts = new Map<string, SidebarCategory>()
   articles.forEach((article) => {
     if (!counts.has(article.category)) {
@@ -88,7 +89,7 @@ export const buildSidebarMeta = (articles: { category: string; categoryLabel: st
   })
 
   const categories = [
-    { id: "all", name: "全部", count: articles.length },
+    { id: "all", name: lang === "en" ? "All" : "全部", count: articles.length },
     ...Array.from(counts.values()).sort((a, b) => a.name.localeCompare(b.name)),
   ]
 

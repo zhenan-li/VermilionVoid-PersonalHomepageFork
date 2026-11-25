@@ -1,0 +1,139 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import ArticleContent from "@/components/ArticleContent.astro"
+import SiteHeader from "@/components/site-header.astro"
+import { Footer } from "@/components/footer"
+import { render } from "astro:content"
+import { type PostEntry } from "@/lib/posts"
+import Disclaimer from "@/components/Disclaimer.astro"
+import PasswordProtection from "@/components/PasswordProtection.astro"
+import Comments from "@/components/Comments.astro"
+import bcrypt from "bcryptjs"
+import CryptoJS from "crypto-js"
+
+import { profile } from "@/data/profile"
+import { languages, localText, siteName, type Locale } from "@/data/languages"
+import { articleLanguage, editions } from "@/lib/editions"
+export async function getStaticPaths() {
+  const paths = []
+  for (const lang of languages) {
+    const entries = await editions(lang)
+    for (const [index, entry] of entries.entries()) {
+      const prev = entries[index + 1], next = entries[index - 1]
+      const post = { ...entry.post, data: { ...entry.post.data,
+        prevSlug: prev?.key ?? "", prevTitle: prev?.post.data.title ?? "",
+        nextSlug: next?.key ?? "", nextTitle: next?.post.data.title ?? "" } }
+      paths.push({ params: { lang, slug: entry.key }, props: { post, lang, translated: entry.translated } })
+    }
+  }
+  return paths
+}
+const { post, lang, translated } = Astro.props as { post: PostEntry; lang: Locale; translated: boolean }
+const original = articleLanguage(post)
+const { Content, remarkPluginFrontmatter } = await render(post)
+const words = remarkPluginFrontmatter?.words
+const minutes = remarkPluginFrontmatter?.minutes
+
+const normalizeText = (text: string) => text.replace(/\s+/g, " ").trim()
+const buildMetaDescription = (primary: string, fallback: string, title: string, encrypted: boolean) => {
+  const preferred = normalizeText(primary)
+  const backup = normalizeText(fallback)
+
+  // 手写 description 优先；没有才用正文摘要，摘要太短再退回标题
+  let result = preferred
+  if (!result) {
+    result = encrypted ? "" : backup
+  }
+  if (!result || (!preferred && result.length < 60)) {
+    result = encrypted ? title + (lang === "en" ? " — Password required." : "｜此文章已加密。") : title
+  }
+  return result.length > 160 ? result.slice(0, 160) : result
+}
+
+const description = buildMetaDescription(
+  post.data.description || "",
+  remarkPluginFrontmatter?.excerpt || "",
+  post.data.title,
+  post.data.encrypted ?? false,
+)
+const title = `${post.data.title} | ${siteName[lang]}`
+const publishedIso = post.data.published ? new Date(post.data.published).toISOString() : ""
+const updatedIso = post.data.updated ? new Date(post.data.updated).toISOString() : ""
+const category = (post.data.category ?? "").toString().trim()
+const tags = post.data.tags ?? []
+const canonicalUrl = new URL(Astro.url.pathname.replace("/" + lang + "/", "/" + original + "/"), Astro.site ?? Astro.url).href
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: post.data.title,
+  description,
+  inLanguage: original,
+  datePublished: publishedIso || undefined,
+  dateModified: updatedIso || publishedIso || undefined,
+  mainEntityOfPage: canonicalUrl,
+  author: {
+    "@type": "Person",
+    name: localText(profile.name, original),
+  },
+  publisher: {
+    "@type": "Organization",
+    name: siteName[lang],
+  },
+  keywords: tags.length ? tags.join(", ") : undefined,
+  articleSection: category || undefined,
+}
+
+let encryptedData = null
+if (post.data.encrypted && post.data.password) {
+  const passwordHash = bcrypt.hashSync(post.data.password, 10)
+  const body = typeof post.body === "string" ? post.body : String(post.body || "")
+  const encrypted = CryptoJS.AES.encrypt(body, post.data.password).toString()
+  encryptedData = {
+    content: encrypted,
+    hash: passwordHash,
+  }
+}
+---
+
+<BaseLayout
+  canonical={canonicalUrl}
+  alternateLocales={translated ? languages : [original]}
+  {title}
+  {description}
+  ogType="article"
+  ogTitle={post.data.title}
+  twitterTitle={post.data.title}
+  ogImage={post.data.image}
+  robots={post.data.encrypted ? "noindex, nofollow" : undefined}
+>
+  <Fragment slot="head">
+    {publishedIso ? <meta property="article:published_time" content={publishedIso} /> : null}
+    {updatedIso ? <meta property="article:modified_time" content={updatedIso} /> : null}
+    {category ? <meta property="article:section" content={category} /> : null}
+    {tags.map((tag: string) => (
+      <meta property="article:tag" content={tag} />
+    ))}
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+  </Fragment>
+  <div class="min-h-screen bg-background dark:bg-surface-subtle">
+    <SiteHeader />
+    <ArticleContent post={post} {Content} {words} {minutes}>
+      <div class="mb-8" lang={lang}>
+        {lang !== original && <p class="mb-4 text-sm text-muted-foreground">{lang === "zh" ? "本文目前仅有英文原文。" : "This article is currently available in Chinese."}</p>}
+        <Disclaimer disclaimers={post.data.disclaimer} publishedDate={post.data.published} />
+      </div>
+      {encryptedData ? (
+        <div class="mb-6">
+          <PasswordProtection encryptedData={encryptedData} slug={post.id} class="mb-6 rounded-xl" />
+          <div id={`article-content-${post.id}`} class="mb-6 hidden encrypted-content">
+            <!-- 内容将在验证密码后动态插入 -->
+          </div>
+        </div>
+      ) : (
+        <Content />
+      )}
+    </ArticleContent>
+    <Comments />
+    <Footer {lang} />
+  </div>
+</BaseLayout>
