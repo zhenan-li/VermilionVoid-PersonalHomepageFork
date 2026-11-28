@@ -1,7 +1,11 @@
 ---
-import { defaultLocale } from "@/data/languages"
+import { defaultLocale, siteName } from "@/data/languages"
+import { profile } from "@/data/profile"
+import { rssHref } from "@/lib/site-settings"
 ---
 <!doctype html><html lang={defaultLocale}><head><meta charset="utf-8" /><title>Personal homepage</title>
+<link rel="icon" href={profile.avatar.trim() || "/mark.png"} />
+<link rel="alternate" type="application/rss+xml" title={siteName[defaultLocale]} href={rssHref(defaultLocale)} />
 <script is:inline define:vars={{defaultLocale}}>
   const saved = document.cookie.match(/(?:^|; )site_lang=(en|zh)(?:;|$)/)?.[1]
   location.replace("/" + (saved || defaultLocale) + "/" + location.search + location.hash)

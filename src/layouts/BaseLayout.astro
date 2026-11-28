@@ -1,5 +1,8 @@
 ---
 import { languages, routeLocale, siteName, siteDescription, type Locale } from "@/data/languages"
+import { profile } from "@/data/profile"
+import { articleBodySize, articleTitleSize, homeHeadingSize, homeIntroSize } from "@/data/site-settings"
+import { rssHref } from "@/lib/site-settings"
 import "@/styles/global.css"
 import { ClientRouter } from "astro:transitions"
 
@@ -61,7 +64,12 @@ const resolvedTwitterDescription = twitterDescription || description
 ---
 
 <!doctype html>
-<html lang={lang === "zh" ? "zh-CN" : "en"}>
+<html lang={lang === "zh" ? "zh-CN" : "en"} style={{
+  "--home-heading-scale": homeHeadingSize / 100,
+  "--home-intro-scale": homeIntroSize / 100,
+  "--article-title-scale": articleTitleSize / 100,
+  "--article-body-scale": articleBodySize / 100,
+}}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -84,7 +92,7 @@ const resolvedTwitterDescription = twitterDescription || description
     <meta name="twitter:description" content={resolvedTwitterDescription} />
     {resolvedOgImage ? <meta name="twitter:image" content={resolvedOgImage} /> : null}
     <slot name="head" />
-    <link rel="alternate" type="application/rss+xml" title={siteName[lang]} href={"/" + lang + "/rss.xml"} />
+    <link rel="alternate" type="application/rss+xml" title={siteName[lang]} href={rssHref(lang)} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     {useHarmonySans ? <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin /> : null}
@@ -106,7 +114,7 @@ const resolvedTwitterDescription = twitterDescription || description
         ? "https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Noto+Serif+SC:wght@400..900&display=swap"
         : "https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Inter:wght@400..700&family=Noto+Sans+SC:wght@400..700&family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Noto+Serif+SC:wght@400..900&display=swap"}
     />
-    <link rel="icon" type="image/png" href="/mark.png" />
+    <link rel="icon" href={profile.avatar.trim() || "/mark.png"} />
     <script is:inline>
       // 主题初始化 - 防止页面加载闪烁
       (function() {

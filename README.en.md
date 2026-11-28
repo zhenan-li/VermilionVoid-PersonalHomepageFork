@@ -8,6 +8,7 @@
 - **[Region-based homepage language](#language-and-navigation)**. English is the default. On Vercel, a first visit to the homepage can redirect to Chinese based on the visitor's IP region. A manual language choice takes precedence on future visits.
 - **[Bilingual personal timeline](#personal-timeline)**. Milestones are grouped by year, with support for single dates, date ranges, ongoing activities, and links to posts or projects. Both languages have a demo built from [`journey.example.json`](src/data/journey.example.json).
 - **[Ready to use as a personal website](#customization-and-deployment)**. Includes a blog, personal timeline, projects, and CV. Profile fields and personal entries start empty, and the blog includes one Hello World test post.
+- **[Adjustable typography and site links](#customization-and-deployment)**. Set homepage and article font sizes, add an email address, override the English and Chinese RSS links, and edit the footer theme link. The browser icon follows the avatar.
 
 An Astro template based on [VermilionVoid](https://github.com/Lapis0x0/VermilionVoid). The original author retains copyright to the upstream posts. See the [upstream licensing notes](https://github.com/Lapis0x0/VermilionVoid#许可).
 
@@ -55,6 +56,8 @@ Titles, descriptions, and link labels can also use a single language or a shared
 
 ## Customization and deployment
 
-- Fill in a name, bio, avatar, or social links in `src/data/profile.ts` to show the author card. Edit the site title and description in `src/data/languages.ts` and the navigation in `src/data/navigation.ts`.
+- Set your author details in `src/data/profile.ts`. `email` adds a mail link to the author card and footer. `avatar` also supplies the browser icon, which falls back to `/mark.png` when left blank. Edit the site title and description in `src/data/languages.ts` and the navigation in `src/data/navigation.ts`.
+- Use `src/data/site-settings.ts` to edit typography, RSS links, and the footer theme link. Each of the four font sizes uses `100` for the theme default, with separate values for the homepage headline, introduction, article title, and body.
+- RSS readers poll a feed for new posts. The site builds feeds at `/en/rss.xml` and `/zh/rss.xml`. Set `rssSources.en` or `rssSources.zh` to override both the footer link and feed discovery for that language. Existing feed URLs continue to work.
 - Edit projects in `src/data/projects.ts` and the CV page in `src/pages/[lang]/cv.astro`.
 - Vercel builds the site using `vercel.json`. The production URL defaults to `VERCEL_PROJECT_PRODUCTION_URL`. If you connect a custom domain, set `SITE_URL` to its full URL, including `https://`, and redeploy to update canonical links, RSS feeds, and the sitemap.

@@ -6,6 +6,38 @@
 
 @custom-variant dark (&:is(.dark *));
 
+.home-heading {
+  --home-heading-base: min(10.5vw, 3rem);
+  font-size: calc(var(--home-heading-base) * var(--home-heading-scale, 1));
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.home-intro {
+  --home-intro-base: 1rem;
+  font-size: calc(var(--home-intro-base) * var(--home-intro-scale, 1));
+}
+
+.article-title {
+  --article-title-base: 1.875rem;
+  font-size: calc(var(--article-title-base) * var(--article-title-scale, 1));
+}
+
+@media (min-width: 40rem) {
+  .home-heading { --home-heading-base: 3.75rem; }
+  .home-intro { --home-intro-base: 1.125rem; }
+  .article-title { --article-title-base: 2.25rem; }
+}
+
+@media (min-width: 48rem) {
+  .home-heading { --home-heading-base: 4.5rem; }
+  .article-title { --article-title-base: 3rem; }
+}
+
+@media (min-width: 64rem) {
+  .home-heading { --home-heading-base: 6rem; }
+}
+
 :root {
   /* Red & White Apple-inspired theme */
   --content-delay: 150ms;

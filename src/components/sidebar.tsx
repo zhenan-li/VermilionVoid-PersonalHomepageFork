@@ -4,7 +4,7 @@ import { localText, type Locale } from "@/data/languages"
 import { msg } from "@/lib/ui"
 import { useState, type ReactNode } from "react"
 import { cn } from "@/lib/utils"
-import { profile } from "@/data/profile"
+import { profile, profileContacts } from "@/data/profile"
 import { ProfileContactLink } from "@/components/profile-contact-link"
 
 interface SidebarProps {
@@ -39,7 +39,8 @@ export function Sidebar({
   const setExpanded = onCategoriesExpandedChange ?? setInternalExpanded
   const name = localText(profile.name, lang)
   const bio = localText(profile.bio, lang)
-  const hasProfile = Boolean(name || bio || profile.avatar || profile.links.length)
+  const contacts = profileContacts(lang)
+  const hasProfile = Boolean(name || bio || profile.avatar || contacts.length)
   const canCollapse = categories.length > categoryPreviewCount
   const visibleCategories = isExpanded ? categories : categories.slice(0, categoryPreviewCount)
 
@@ -58,9 +59,9 @@ export function Sidebar({
           )}
           {name && <h3 className="font-serif text-xl font-bold text-foreground">{name}</h3>}
           {bio && <p className="text-sm text-muted-foreground leading-relaxed">{bio}</p>}
-          {profile.links.length > 0 && (
+          {contacts.length > 0 && (
             <div className="flex items-center justify-center gap-3">
-              {profile.links.map(link => (
+              {contacts.map(link => (
                 <ProfileContactLink
                   key={link.name}
                   link={link}

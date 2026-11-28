@@ -2,19 +2,22 @@ import { localText, siteName, siteDescription, type Locale } from "@/data/langua
 import { msg } from "@/lib/ui"
 import { navigation } from "@/data/navigation"
 import type { ComponentType, SVGProps } from "react"
-import { Github, Music, Rss } from "lucide-react"
-import { profile, type ExternalProfileLink, type ExternalProfileLinkType } from "@/data/profile"
+import { Github, Mail, Music, Rss } from "lucide-react"
+import { profile, profileContacts, type ExternalProfileLink, type ExternalProfileLinkType } from "@/data/profile"
+import { themeUrl } from "@/data/site-settings"
+import { rssHref } from "@/lib/site-settings"
 import { QqIcon } from "@/components/icons/qq-icon"
 
 const iconMap: Record<ExternalProfileLinkType, ComponentType<SVGProps<SVGSVGElement>>> = {
   qq: QqIcon,
   music: Music,
   github: Github,
+  email: Mail,
 }
 
 export function Footer({ lang }: { lang: Locale }) {
   const navItems = navigation(lang)
-  const contacts = profile.links.filter((link): link is ExternalProfileLink => link.type !== "wechat")
+  const contacts = profileContacts(lang).filter((link): link is ExternalProfileLink => link.type !== "wechat")
   return (
     <footer className="border-t border-border/50 bg-background">
       <div className="max-w-6xl mx-auto px-6 py-16">
@@ -71,7 +74,7 @@ export function Footer({ lang }: { lang: Locale }) {
                         <a
                           key={link.name}
                           href={link.url}
-                          target="_blank"
+                          target={link.type === "email" ? undefined : "_blank"}
                           rel="noreferrer"
                           className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/50 transition-all duration-200"
                           aria-label={link.name}
@@ -85,7 +88,7 @@ export function Footer({ lang }: { lang: Locale }) {
               )}
               <p className="text-muted-foreground text-sm">{msg(lang, "通过 RSS 订阅，获取最新文章更新。")}</p>
               <a
-                href={"/" + lang + "/rss.xml"}
+                href={rssHref(lang)}
                 target="_blank"
                 rel="noreferrer"
                 className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 transition-opacity duration-200"
@@ -101,7 +104,7 @@ export function Footer({ lang }: { lang: Locale }) {
         <div className="mt-16 pt-8 border-t border-border/50 grid gap-4 md:grid-cols-3">
           <p className="text-muted-foreground text-sm">© {new Date().getFullYear()} {localText(profile.name, lang) || siteName[lang]}</p>
           <a
-            href="https://github.com/Lapis0x0/VermilionVoid"
+            href={themeUrl}
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-2 text-muted-foreground text-xs hover:text-foreground transition-colors duration-200 group md:justify-end md:pr-4"

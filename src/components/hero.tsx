@@ -119,7 +119,7 @@ export function Hero({ lang }: { lang: Locale }) {
 
   return (
     <section ref={sectionRef} className="relative min-h-[100svh] flex items-center justify-center px-6 bg-surface-subtle">
-      <div className="max-w-4xl mx-auto text-center">
+      <div className="w-full min-w-0 max-w-7xl mx-auto text-center">
         <div
           className={`transition-all duration-1000 ease-out ${
             mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
@@ -129,14 +129,15 @@ export function Hero({ lang }: { lang: Locale }) {
             {siteName[lang]}
           </p>
 
-          <h1 className="font-sans text-[min(10.5vw,3rem)] sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-foreground leading-[1.1] mb-8 min-h-[1.2em] whitespace-nowrap">
+          <h1 className="home-heading font-sans font-bold tracking-tight text-foreground leading-[1.1] mb-8 min-h-[1.2em]">
             <span className="text-primary">{displayText}</span>
             <span
-              className="hero-cursor inline-block w-[0.08em] sm:w-[5px] md:w-[6px] lg:w-[7px] h-[0.9em] sm:h-[60px] md:h-[72px] lg:h-[96px] bg-foreground align-middle rounded-sm ml-2 -translate-y-1"
+              aria-hidden="true"
+              className="hero-cursor inline-block w-[0.075em] h-[0.95em] bg-foreground align-middle rounded-sm ml-2 -translate-y-1"
             />
           </h1>
 
-          <p className="max-w-xl mx-auto mb-10 font-serif text-content-secondary text-base sm:text-lg leading-relaxed">
+          <p className="home-intro max-w-xl mx-auto mb-10 font-serif text-content-secondary leading-relaxed">
             {localText(profile.bio, lang) || siteDescription[lang]}
           </p>
 

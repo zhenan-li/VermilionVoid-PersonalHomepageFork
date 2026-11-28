@@ -1,6 +1,6 @@
 "use client"
 
-import { Github, Music } from "lucide-react"
+import { Github, Mail, Music } from "lucide-react"
 import { IconBrandWechat } from "@tabler/icons-react"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -12,6 +12,7 @@ const iconMap = {
   qq: QqIcon,
   music: Music,
   github: Github,
+  email: Mail,
   wechat: IconBrandWechat,
 }
 
@@ -43,7 +44,7 @@ export function ProfileContactLink({ link, className, iconClassName }: ProfileCo
     return (
       <a
         href={link.url}
-        target="_blank"
+        target={link.type === "email" ? undefined : "_blank"}
         rel="noreferrer"
         className={className}
         aria-label={link.name}

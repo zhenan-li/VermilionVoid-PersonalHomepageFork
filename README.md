@@ -8,6 +8,7 @@
 - **[按访问地区选择首页语言](#语言和访问入口)**。默认英文。部署到 Vercel 后，首次打开首页可按 IP 所在地区切换为中文。访客随时可以手动切换，之后优先使用记住的选择。
 - **[双语个人时间线](#个人经历时间线)**。按年展示经历，支持单日事件、起止日期、进行中的事项，以及文章和项目链接。附带中文版和英文版演示，样例数据见 [`journey.example.json`](src/data/journey.example.json)。
 - **[可直接复用的个人主页](#其他配置与部署)**。提供博客、个人时间线、项目和简历页。作者资料与个人条目默认留空，博客附带一篇 Hello World 测试文章。
+- **[可编辑的字号与站点链接](#其他配置与部署)**。分别设置首页与文章的字号，添加联系邮箱，替换中英文 RSS 和页脚主题链接。浏览器标签图标随头像更新。
 
 基于 [VermilionVoid（朱墨留白）](https://github.com/Lapis0x0/VermilionVoid) 的 Astro 模板。上游文章版权归原作者，许可说明见[上游 README](https://github.com/Lapis0x0/VermilionVoid#许可)。
 
@@ -55,6 +56,8 @@ translationKey: hello-world
 
 ## 其他配置与部署
 
-- 要显示作者卡片，在 `src/data/profile.ts` 中填写姓名、简介、头像或社交链接。留空时页面会隐藏作者卡片。站名和站点描述在 `src/data/languages.ts`，导航在 `src/data/navigation.ts`。
+- 在 `src/data/profile.ts` 填写作者资料。`email` 会在作者卡片和页脚生成邮件链接。`avatar` 同时用于站点头像和浏览器标签图标，留空时图标使用 `/mark.png`。站名和站点描述在 `src/data/languages.ts`，导航在 `src/data/navigation.ts`。
+- `src/data/site-settings.ts` 管理字号、RSS 和页脚主题链接。四个字号以主题默认值为 `100`，可分别调整首页主标题、首页简介、文章标题和文章正文。
+- RSS 阅读器会定期读取订阅 XML，获取新文章。内置的 `/en/rss.xml` 和 `/zh/rss.xml` 随网站构建生成。填写 `rssSources.en` 或 `rssSources.zh` 会替换对应语言的浏览器自动发现地址和页脚订阅链接，原有订阅地址仍然可用。
 - 项目在 `src/data/projects.ts`，简历页在 `src/pages/[lang]/cv.astro`。
 - Vercel 使用仓库的 `vercel.json` 构建。生产域名默认读取 `VERCEL_PROJECT_PRODUCTION_URL`。绑定自定义域名后，设置完整的 `SITE_URL`（含 `https://`）并重新部署，即可更新规范链接、RSS 和站点地图。
